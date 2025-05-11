@@ -14,7 +14,7 @@
 	const items = [
 		{
 			title: 'Home',
-			url: '#',
+			url: '/',
 			icon: House
 		},
 		{
@@ -23,18 +23,13 @@
 			icon: Server
 		},
 		{
-			title: 'Library',
-			url: '#',
+			title: 'Libraries',
+			url: '/libraries',
 			icon: Inbox
 		},
 		{
-			title: 'Search',
-			url: '#',
-			icon: Search
-		},
-		{
 			title: 'Settings',
-			url: '#',
+			url: '/settings',
 			icon: Settings
 		}
 	];
