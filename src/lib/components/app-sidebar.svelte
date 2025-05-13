@@ -7,8 +7,7 @@
 	import ChevronUp from '@lucide/svelte/icons/chevron-up';
 	import Server from 'lucide-svelte/icons/server';
 	import { User } from 'lucide-svelte';
-	import { getContext } from 'svelte';
-	import type { SupabaseClient, User as SupabaseUser } from '@supabase/supabase-js';
+	import type { SupabaseClient } from '@supabase/supabase-js';
 
 	// Menu items.
 	const items = [
@@ -36,7 +35,7 @@
 
 	let { supabase }: { supabase: SupabaseClient } = $props();
 	const p = supabase.auth.getUser();
-	p.then((r) => console.log(r));
+	// p.then((r) => console.log(r));
 </script>
 
 <Sidebar.Root collapsible="icon">

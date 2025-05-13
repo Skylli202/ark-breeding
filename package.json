@@ -42,6 +42,7 @@
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.10",
+		"supabase": "^2.22.12",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"svelte-sonner": "^0.3.28",
@@ -65,6 +66,7 @@
 	"dependencies": {
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.49.4",
+		"@tanstack/table-core": "^8.21.3",
 		"lucide-svelte": "^0.509.0"
 	}
 }
