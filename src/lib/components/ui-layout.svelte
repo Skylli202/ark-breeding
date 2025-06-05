@@ -18,9 +18,7 @@
 		<Sidebar.Trigger class="-ml-1" />
 		<Separator orientation="vertical" class="mr-2 h-4" />
 		<div class="flex flex-grow items-center justify-between">
-			<div class="h-8 w-8">
-				{@render header?.()}
-			</div>
+			{@render header?.()}
 			<!-- <Breadcrumb.Root> -->
 			<!-- 	<Breadcrumb.List> -->
 			<!-- 		<Breadcrumb.Item class="hidden md:block"> -->

@@ -9,6 +9,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import { formSchema, type FormSchema } from './schema';
+	import { Plus } from 'lucide-svelte';
 
 	let open = $state(false);
 	let { data }: { data: { form: SuperValidated<Infer<FormSchema>> } } = $props();
@@ -28,7 +29,10 @@
 <UiLayout>
 	{#snippet header()}
 		<Dialog.Root bind:open>
-			<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Create server</Dialog.Trigger>
+			<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>
+				<Plus class="-mx-1"></Plus>
+				Create server
+			</Dialog.Trigger>
 			<Dialog.Content class="sm:max-w-[425px]">
 				<Dialog.Header>
 					<Dialog.Title>New Server</Dialog.Title>
