@@ -10,16 +10,24 @@
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import { formSchema, type FormSchema } from './schema';
 
+	let open = $state(false);
 	let { data }: { data: { form: SuperValidated<Infer<FormSchema>> } } = $props();
 	const form = superForm(data.form, {
-		validators: zodClient(formSchema)
+		validators: zodClient(formSchema),
+		// Close the dialog on successful creation!
+		onUpdated(event) {
+			if (!event.form.valid) {
+				return;
+			}
+			open = false;
+		}
 	});
 	const { form: formData, enhance } = form;
 </script>
 
 <UiLayout>
 	{#snippet header()}
-		<Dialog.Root>
+		<Dialog.Root bind:open>
 			<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Create server</Dialog.Trigger>
 			<Dialog.Content class="sm:max-w-[425px]">
 				<Dialog.Header>
