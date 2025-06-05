@@ -40,7 +40,7 @@
 					<Form.Field {form} name="name">
 						<Form.Control>
 							{#snippet children({ props })}
-								<Form.Label>Username</Form.Label>
+								<Form.Label>Server nickname</Form.Label>
 								<Input {...props} bind:value={$formData.name} />
 							{/snippet}
 						</Form.Control>
