@@ -4,8 +4,6 @@
 
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import AppSidebar from '$lib/components/app-sidebar.svelte';
-	import { onMount } from 'svelte';
-	import { invalidate } from '$app/navigation';
 
 	let { children } = $props();
 </script>
