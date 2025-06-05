@@ -7,21 +7,11 @@
 	import { onMount } from 'svelte';
 	import { invalidate } from '$app/navigation';
 
-	let { children, data } = $props();
-	let { session, supabase } = $derived(data);
-
-	onMount(() => {
-		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
-			if (newSession?.expires_at !== session?.expires_at) {
-				invalidate('supabase:auth');
-			}
-		});
-		return () => data.subscription.unsubscribe();
-	});
+	let { children } = $props();
 </script>
 
 <Sidebar.Provider>
-	<AppSidebar {supabase} />
+	<AppSidebar />
 	<main class="flex-1">
 		<ModeWatcher />
 

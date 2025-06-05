@@ -32,10 +32,6 @@
 			icon: Settings
 		}
 	];
-
-	let { supabase }: { supabase: SupabaseClient } = $props();
-	const p = supabase.auth.getUser();
-	// p.then((r) => console.log(r));
 </script>
 
 <Sidebar.Root collapsible="icon">
@@ -71,20 +67,7 @@
 								class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 							>
 								<User />
-								{#await p}
-									LOADING
-								{:then r}
-									{@const user = r.data.user}
-									{@const err = r.error}
-									{#if err}
-										oops something bad happened ERR
-									{:else if user == null}
-										oops something bad happened USER NULL
-									{:else}
-										{user.email}
-										<ChevronUp />
-									{/if}
-								{/await}
+								MY USERNAME
 							</Sidebar.MenuButton>
 						{/snippet}
 					</DropdownMenu.Trigger>
