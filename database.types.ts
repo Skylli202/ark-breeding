@@ -39,16 +39,19 @@ export type Database = {
           created_at: string
           id: number
           name: string
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
-          name?: string
+          name: string
+          user_id?: string
         }
         Update: {
           created_at?: string
           id?: number
           name?: string
+          user_id?: string
         }
         Relationships: []
       }
