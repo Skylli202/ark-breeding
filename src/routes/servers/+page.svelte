@@ -7,12 +7,13 @@
 	import WorkInProgress from '$lib/components/work-in-progress.svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import { formSchema, type FormSchema } from './schema';
+	import { formSchema } from './schema';
 	import { Plus } from 'lucide-svelte';
+	import DataTable from './data-table.svelte';
+	import { columns } from './columns';
 
 	let open = $state(false);
-	let { data }: { data: { form: SuperValidated<Infer<FormSchema>> } } = $props();
+	let { data } = $props();
 	const form = superForm(data.form, {
 		validators: zodClient(formSchema),
 		// Close the dialog on successful creation!
@@ -57,6 +58,8 @@
 	{/snippet}
 
 	{#snippet content()}
-		<WorkInProgress />
+		<div class="">
+			<DataTable data={data.servers} {columns} />
+		</div>
 	{/snippet}
 </UiLayout>
