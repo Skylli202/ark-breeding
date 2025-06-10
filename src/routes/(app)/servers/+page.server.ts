@@ -1,6 +1,6 @@
 import type { Actions } from './$types';
-import { db } from '../../db';
-import { serversTable } from '../../schema';
+import { db } from '$lib/db';
+import { serversTable } from '$lib/schema';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from "sveltekit-superforms/adapters";
 import { formSchema } from './schema';
