@@ -6,10 +6,10 @@
 		CardHeader,
 		CardTitle
 	} from '$lib/components/ui/card';
-	import { Info } from 'lucide-svelte';
+	import { Info } from '@lucide/svelte';
 </script>
 
-<div class="min-w-screen flex min-h-full items-center justify-center">
+<div class="flex min-h-full min-w-screen items-center justify-center">
 	<Card class="w-[350px] text-center">
 		<CardHeader>
 			<CardTitle class="flex items-center justify-center space-x-2">

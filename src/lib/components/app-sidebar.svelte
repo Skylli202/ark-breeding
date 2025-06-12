@@ -4,8 +4,7 @@
 	import Settings from '@lucide/svelte/icons/settings';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import Server from 'lucide-svelte/icons/server';
-	import { User } from 'lucide-svelte';
+	import { User, Server } from '@lucide/svelte';
 	import { authClient, type Session } from '$lib/auth-client';
 	import Button from './ui/button/button.svelte';
 	import Separator from './ui/separator/separator.svelte';
