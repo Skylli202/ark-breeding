@@ -5,7 +5,11 @@ import { account, session, usersTable, verification } from "./schema";
 
 export const auth = betterAuth({
   emailAndPassword: {
-    enabled: true
+    enabled: true,
+    // Please don't be an asshole and sign my user right away
+    autoSignIn: true,
+    // I'm not a real website, I do not really care about email..
+    requireEmailVerification: false
   },
   database: drizzleAdapter(db, {
     provider: "pg",
