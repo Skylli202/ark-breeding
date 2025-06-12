@@ -17,22 +17,22 @@
 		async onUpdate(event) {
 			if (event.form.valid) {
 				invalid = false;
-				const x = await authClient.signUp.email({ ...event.form.data });
-				if (x.error) {
-					if (x.error.message) {
-						setError(event.form, x.error.message);
+				const { error, data } = await authClient.signUp.email({ ...event.form.data });
+				if (error) {
+					if (error.message) {
+						setError(event.form, error.message);
 					} else {
 						setError(event.form, 'An unknown error occurred during sign up.');
 					}
-
 					invalid = true;
 				} else {
+					console.log(`Successfully signup user ${data.user.name} (${data.user.email})`);
 					await goto('/');
 				}
 			} else {
 				invalid = true;
 			}
-		},
+		}
 	});
 	const { form: formData, errors, enhance } = form;
 </script>
