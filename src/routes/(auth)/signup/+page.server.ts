@@ -5,6 +5,6 @@ import { signUpSchema } from "./schema";
 
 export const load: PageServerLoad = async () => {
   return {
-    form: await superValidate({ name: "sky", email: "test@example.com", password: "qwerqwerqwer" }, zod(signUpSchema),)
+    form: await superValidate(zod(signUpSchema),)
   }
 }

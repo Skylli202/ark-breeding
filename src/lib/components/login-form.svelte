@@ -13,8 +13,8 @@
 	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
 	const id = $props.id();
 
-	let email = $state('test@example.com');
-	let password = $state('qwerqwerqwer');
+	let email = $state('');
+	let password = $state('');
 	let invalid = $state(false);
 	let message = $state('');
 
