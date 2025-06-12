@@ -65,6 +65,7 @@
 			<div class="grid gap-3">
 				<Label for="email-{id}">Email</Label>
 				<Input
+					aria-invalid
 					id="email-{id}"
 					name="email"
 					type="email"
@@ -93,7 +94,7 @@
 		<!-- </div> -->
 	</form>
 	<div
-		class="*:[a]:hover:text-primary *:[a]:underline *:[a]:underline-offset-4 text-balance text-center text-xs text-muted-foreground"
+		class="*:[a]:hover:text-primary text-muted-foreground text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4"
 	>
 		By clicking continue, you agree to our <a href="##" class="hover:underline">Terms of Service</a>
 		and <a href="##" class="hover:underline">Privacy Policy</a>.

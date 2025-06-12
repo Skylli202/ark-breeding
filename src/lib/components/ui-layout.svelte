@@ -17,7 +17,7 @@
 	<header class="sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
 		<Sidebar.Trigger class="-ml-1" />
 		<Separator orientation="vertical" class="mr-2 h-4" />
-		<div class="flex flex-grow items-center justify-between">
+		<div class="flex grow items-center justify-between">
 			{@render header?.()}
 			<!-- <Breadcrumb.Root> -->
 			<!-- 	<Breadcrumb.List> -->
