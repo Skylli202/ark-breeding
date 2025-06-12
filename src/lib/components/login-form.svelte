@@ -65,19 +65,19 @@
 			<div class="grid gap-3">
 				<Label for="email-{id}">Email</Label>
 				<Input
-					aria-invalid
+					aria-invalid={invalid}
 					id="email-{id}"
 					name="email"
 					type="email"
 					placeholder="m@example.com"
 					required
-					class={invalid ? 'border-red-400' : ''}
 					bind:value={email}
 				/>
 			</div>
 			<div class="grid gap-3">
 				<Label for="password-{id}">Password</Label>
 				<Input
+					aria-invalid={invalid}
 					id="password-{id}"
 					name="password"
 					type="password"
