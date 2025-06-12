@@ -75,7 +75,6 @@
     "better-auth": "^1.2.8",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.2",
-    "embla-carousel-svelte": "^8.6.0",
-    "lucide-svelte": "^0.509.0"
+    "embla-carousel-svelte": "^8.6.0"
   }
 }
