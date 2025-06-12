@@ -1,63 +1,96 @@
 <script lang="ts">
-	import SuperDebug from 'sveltekit-superforms';
 	import * as Form from '$lib/components/ui/form/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { signUpSchema, type SignUpSchema } from './schema';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { GalleryVerticalEndIcon } from '@lucide/svelte';
 
 	let { data }: { data: { form: SuperValidated<Infer<SignUpSchema>> } } = $props();
 
+	let invalid = $state(false);
 	const form = superForm(data.form, {
-		validators: zodClient(signUpSchema)
+		validators: zodClient(signUpSchema),
+		onSubmit(_event) {
+			invalid = false;
+		},
+		onUpdate(event) {
+			if (event.result.type == 'failure') {
+				invalid = true;
+			} else {
+				invalid = false;
+			}
+		},
+		onError(_event) {
+			invalid = true;
+		}
 	});
-
-	const { form: formData, errors, allErrors, message, enhance } = form;
+	const { form: formData, errors, enhance } = form;
 </script>
 
-<SuperDebug
-	data={{ formData: $formData, errors: $errors, allErrors: $allErrors, message: $message }}
-/>
+<div class="flex flex-col gap-6">
+	<form method="POST" use:enhance>
+		<div class="flex flex-col items-center gap-2">
+			<a href="##" class="flex flex-col items-center gap-2 font-medium">
+				<div class="flex size-8 items-center justify-center rounded-md">
+					<GalleryVerticalEndIcon class="size-6" />
+				</div>
+				<span class="sr-only">ARK: Breeding</span>
+			</a>
+			<h1 class="text-xl font-bold">Welcome to ARK Breeding</h1>
+			<div class="text-center text-sm">
+				Already have an account?
+				<a href="/signin" class="underline underline-offset-4">Sign in</a>
+			</div>
+		</div>
 
-<form method="POST" use:enhance>
-	<Form.Field {form} name="name">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>Username</Form.Label>
-				<Input {...props} bind:value={$formData.name} />
-			{/snippet}
-		</Form.Control>
-		<Form.Description>This is your public display name.</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
+		<div class="mt-4 flex flex-col gap-3">
+			<Form.Field {form} name="name">
+				<Form.Control>
+					{#snippet children({ props })}
+						<Form.Label>Username</Form.Label>
+						<Input {...props} bind:value={$formData.name} aria-invalid={invalid} />
+					{/snippet}
+				</Form.Control>
+				<Form.Description>This is your public display name.</Form.Description>
+				<Form.FieldErrors />
+			</Form.Field>
 
-	<Form.Field {form} name="email">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>Email</Form.Label>
-				<Input {...props} bind:value={$formData.email} />
-			{/snippet}
-		</Form.Control>
-		<Form.Description>This is your public display name.</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
+			<Form.Field {form} name="email">
+				<Form.Control>
+					{#snippet children({ props })}
+						<Form.Label>Email</Form.Label>
+						<Input {...props} bind:value={$formData.email} aria-invalid={invalid} />
+					{/snippet}
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
 
-	<Form.Field {form} name="password">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>Password</Form.Label>
-				<Input {...props} bind:value={$formData.password} />
-			{/snippet}
-		</Form.Control>
-		<Form.Description>This is your public display name.</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
+			<Form.Field {form} name="password">
+				<Form.Control>
+					{#snippet children({ props })}
+						<Form.Label>Password</Form.Label>
+						<Input {...props} bind:value={$formData.password} aria-invalid={invalid} />
+					{/snippet}
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
 
-	{#if $errors._errors}
-		{#each $errors._errors as error}
-			<p>you have an error: {error}</p>
-		{/each}
-	{/if}
+			{#if $errors._errors}
+				<div class="">
+					{#each $errors._errors as error}
+						<p class="text-destructive text-center text-sm">{error}</p>
+					{/each}
+				</div>
+			{/if}
 
-	<Form.Button>Submit</Form.Button>
-</form>
+			<Form.Button class="w-full cursor-pointer">Submit</Form.Button>
+		</div>
+	</form>
+	<div
+		class="*:[a]:hover:text-primary text-muted-foreground text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4"
+	>
+		By clicking continue, you agree to our <a href="##" class="">Terms of Service</a>
+		and <a href="##" class="">Privacy Policy</a>.
+	</div>
+</div>
