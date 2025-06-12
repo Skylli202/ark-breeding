@@ -1,29 +1,38 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import { signUpSchema, type SignUpSchema } from './schema';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { GalleryVerticalEndIcon } from '@lucide/svelte';
+	import { type Infer, setError, superForm, type SuperValidated } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { signUpSchema, type SignUpSchema } from './schema';
+	import { goto } from '$app/navigation';
+	import { authClient } from '$lib/auth-client';
 
 	let { data }: { data: { form: SuperValidated<Infer<SignUpSchema>> } } = $props();
 
 	let invalid = $state(false);
 	const form = superForm(data.form, {
+		SPA: true,
 		validators: zodClient(signUpSchema),
-		onSubmit(_event) {
-			invalid = false;
-		},
-		onUpdate(event) {
-			if (event.result.type == 'failure') {
-				invalid = true;
-			} else {
+		async onUpdate(event) {
+			if (event.form.valid) {
 				invalid = false;
+				const x = await authClient.signUp.email({ ...event.form.data });
+				if (x.error) {
+					if (x.error.message) {
+						setError(event.form, x.error.message);
+					} else {
+						setError(event.form, 'An unknown error occurred during sign up.');
+					}
+
+					invalid = true;
+				} else {
+					await goto('/');
+				}
+			} else {
+				invalid = true;
 			}
 		},
-		onError(_event) {
-			invalid = true;
-		}
 	});
 	const { form: formData, errors, enhance } = form;
 </script>
