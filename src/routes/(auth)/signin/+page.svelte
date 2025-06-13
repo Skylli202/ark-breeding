@@ -79,7 +79,12 @@
 						<Form.Control>
 							{#snippet children({ props })}
 								<Form.Label>Password</Form.Label>
-								<Input {...props} bind:value={$formData.password} aria-invalid={invalid} />
+								<Input
+									{...props}
+									type="password"
+									bind:value={$formData.password}
+									aria-invalid={invalid}
+								/>
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
