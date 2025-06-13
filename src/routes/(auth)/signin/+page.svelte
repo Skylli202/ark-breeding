@@ -12,7 +12,6 @@
 
 	const session = authClient.useSession();
 	let { data }: PageProps = $props();
-	const id = $props.id();
 
 	let invalid = $state(false);
 	const form = superForm(data.form, {
