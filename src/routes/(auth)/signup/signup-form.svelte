@@ -4,16 +4,16 @@
 	import { GalleryVerticalEndIcon } from '@lucide/svelte';
 	import { type Infer, setError, superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { signUpSchema, type SignUpSchema } from './schema';
+	import { formSchema, type FormSchema } from './schema';
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client';
 
-	let { data }: { data: { form: SuperValidated<Infer<SignUpSchema>> } } = $props();
+	let { data }: { data: { form: SuperValidated<Infer<FormSchema>> } } = $props();
 
 	let invalid = $state(false);
 	const form = superForm(data.form, {
 		SPA: true,
-		validators: zodClient(signUpSchema),
+		validators: zodClient(formSchema),
 		async onUpdate(event) {
 			if (event.form.valid) {
 				invalid = false;
@@ -34,7 +34,12 @@
 			}
 		}
 	});
-	const { form: formData, errors, enhance } = form;
+
+	let formData = $derived(form.form);
+	let errors = $derived(form.errors);
+	// let message = $derived(form.message);
+	let submitting = $derived(form.submitting);
+	let enhance = $derived(form.enhance);
 </script>
 
 <div class="flex flex-col gap-6">
@@ -93,7 +98,9 @@
 				</div>
 			{/if}
 
-			<Form.Button class="w-full cursor-pointer">Submit</Form.Button>
+			<Form.Button class="w-full cursor-pointer" disabled={$submitting}>
+				{$submitting ? 'Submitting...' : 'Submit'}
+			</Form.Button>
 		</div>
 	</form>
 	<div
