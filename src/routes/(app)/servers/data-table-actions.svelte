@@ -8,7 +8,11 @@
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
+	import { type SelectServer } from '$lib/server/schema';
+	import { enhance } from '$app/forms';
+	import { invalidate } from '$app/navigation';
 
+	let { id }: { id: SelectServer['id'] } = $props();
 	let open = $state(false);
 </script>
 
@@ -34,9 +38,23 @@
 				</DropdownMenu.Item>
 			</DropdownMenu.Group>
 			<DropdownMenu.Separator />
-			<DropdownMenu.Item class="text-red-400" onclick={() => alert('not coded :(')}>
-				<Trash2 />
-				Delete
+			<DropdownMenu.Item variant="destructive">
+				<form
+					method="POST"
+					action="/servers/{id}?/delete"
+					use:enhance={() => {
+						return ({ result, update }) => {
+							if (result.type === 'success') {
+								update();
+							}
+						};
+					}}
+				>
+					<button type="submit" class="flex flex-row items-center gap-2">
+						<Trash2 />
+						Delete
+					</button>
+				</form>
 			</DropdownMenu.Item>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>

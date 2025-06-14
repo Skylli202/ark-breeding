@@ -6,6 +6,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { formSchema } from './schema';
 import { fail, redirect } from '@sveltejs/kit';
 import { auth } from '$lib/server/auth';
+import { eq } from 'drizzle-orm';
 
 
 export const load = async (event) => {
@@ -14,7 +15,7 @@ export const load = async (event) => {
     throw redirect(307, '/signin')
   }
 
-  const servers = await db.select().from(serversTable)
+  const servers = await db.select().from(serversTable).where(eq(serversTable.userId, session.user.id))
   return { form: await superValidate(zod(formSchema)), servers }
 }
 

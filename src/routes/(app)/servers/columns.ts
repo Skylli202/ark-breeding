@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/table-core";
-import type { SelectServer } from "../../schema";
+import type { SelectServer } from "$lib/server/schema";
 import { renderComponent } from "$lib/components/ui/data-table/index"
 import DataTableActions from "./data-table-actions.svelte"
 
