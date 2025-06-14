@@ -22,7 +22,7 @@ export const actions = {
   NewServer: async (event) => {
     const session = await auth.api.getSession({ headers: event.request.headers })
     if (!session) {
-      throw redirect(307, '/signin')
+      return fail(401)
     }
 
     const form = await superValidate(event, zod(formSchema))

@@ -8,7 +8,6 @@
 	import { authClient, type Session } from '$lib/auth-client';
 	import Button from './ui/button/button.svelte';
 	import Separator from './ui/separator/separator.svelte';
-	import { redirect } from '@sveltejs/kit';
 	import { invalidateAll } from '$app/navigation';
 
 	let { session }: { session: Session | null } = $props();
