@@ -8,6 +8,27 @@
       "when": 1749866152857,
       "tag": "0000_robust_blacklash",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749942304566,
+      "tag": "0001_create-dinos-table",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749945053669,
+      "tag": "0002_add-dino-stat-levels-to-dinos-table",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1749945486031,
+      "tag": "0003_add-default-random-to-dinos-table-primary-key",
+      "breakpoints": true
     }
   ]
 }
