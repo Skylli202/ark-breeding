@@ -8,6 +8,8 @@
 	import { formSchema } from './schema';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import DataTable from '$lib/components/ui/data-table/data-table.svelte';
+	import { columns } from './columns';
 
 	let open = $state(false);
 	let { data } = $props();
@@ -134,6 +136,8 @@
 	{/snippet}
 
 	{#snippet content()}
-		<div class="">wip</div>
+		<div class="mt-4 mr-4 ml-12">
+			<DataTable data={data.dinos} {columns} />
+		</div>
 	{/snippet}
 </UiLayout>
