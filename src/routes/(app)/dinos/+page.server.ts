@@ -5,7 +5,7 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { formSchema } from "./schema";
 import { db } from "$lib/server/db";
-import { dinosTable } from "$lib/server/schema";
+import { dinosTable, speciesTable } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
 
 export const load: PageServerLoad = async (event) => {
@@ -14,7 +14,11 @@ export const load: PageServerLoad = async (event) => {
     return redirect(307, '/signin')
   }
 
-  return { form: await superValidate(zod(formSchema)), dinos: await db.select().from(dinosTable).where(eq(dinosTable.userId, session.user.id)) }
+  return {
+    form: await superValidate(zod(formSchema)),
+    dinos: await db.select().from(dinosTable).where(eq(dinosTable.userId, session.user.id)),
+    species: await db.select().from(speciesTable).orderBy(speciesTable.commonName)
+  }
 }
 
 export const actions: Actions = {
