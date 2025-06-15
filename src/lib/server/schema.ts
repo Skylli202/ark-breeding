@@ -1,4 +1,4 @@
-import { serial, pgTable, text, timestamp, boolean, uuid, integer } from 'drizzle-orm/pg-core';
+import { serial, pgTable, text, timestamp, boolean, uuid, integer, pgEnum } from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users_table', {
   id: text('id').primaryKey(),
@@ -25,6 +25,7 @@ export type SelectServer = typeof serversTable.$inferSelect;
 export const dinosTable = pgTable('dinos_table', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: text('name'),
+  entityId: text('entity_id').default('Unknown').notNull().references(() => speciesTable.entityId, { onDelete: 'no action', onUpdate: 'cascade' }),
   userId: text('user_id').notNull().references(() => usersTable.id, { onDelete: 'cascade' }),
   healthLevels: integer('health_levels').notNull(),
   staminaLevels: integer('stamina_levels').notNull(),
@@ -37,6 +38,11 @@ export const dinosTable = pgTable('dinos_table', {
 })
 export type InsertDino = typeof dinosTable.$inferInsert;
 export type SelectDino = typeof dinosTable.$inferSelect;
+
+export const speciesTable = pgTable('species_table', {
+  entityId: text('entity_id').primaryKey(), // Ark BP
+  commonName: text('common_name'),
+})
 
 // BetterAuth tables
 export const sessionsTable = pgTable("sessions_table", {

@@ -4,12 +4,14 @@
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Form from '$lib/components/ui/form/index.js';
+	import * as Select from '$lib/components/ui/select/index.js';
 	import { CircleMinus, CirclePlus, Plus } from '@lucide/svelte';
 	import { formSchema } from './schema';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import DataTable from '$lib/components/ui/data-table/data-table.svelte';
 	import { columns } from './columns';
+	import FormControlDinoLevel from './form-control-dino-level.svelte';
 
 	let open = $state(false);
 	let { data } = $props();
@@ -23,6 +25,7 @@
 			open = false;
 		}
 	});
+	const species = $derived(data.species);
 	const formData = $derived(form.form);
 	const enhance = $derived(form.enhance);
 </script>
@@ -53,83 +56,61 @@
 						<Form.FieldErrors />
 					</Form.Field>
 
+					<Form.Field {form} name="entityId" class="w-full">
+						<Form.Control>
+							{#snippet children({ props })}
+								<Form.Label>Species</Form.Label>
+								<Select.Root type="single" bind:value={$formData.entityId} name={props.name}>
+									<Select.Trigger {...props} class="w-full">
+										{$formData.entityId
+											? species.find((s) => s.entityId === $formData.entityId)?.commonName
+											: 'Select the specie of your dino!'}
+									</Select.Trigger>
+									<Select.Content>
+										{#each species as specie}
+											<!-- HACK: commonName can be null because the column ain't NOT NULL but I do not think that's a real thing -->
+											<Select.Item value={specie.entityId} label={specie.commonName ?? ''} />
+										{/each}
+									</Select.Content>
+								</Select.Root>
+							{/snippet}
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+
 					<div class="grid grid-cols-2 gap-2">
 						<Form.Field {form} name="healthLevels">
-							<Form.Control>
-								{#snippet children({ props })}
-									<Form.Label>Health levels</Form.Label>
-									<div class="flex flex-row items-center gap-2">
-										<Input {...props} bind:value={$formData.healthLevels} />
-										<CirclePlus
-											class="h-10 w-10"
-											onclick={() => {
-												$formData.healthLevels++;
-											}}
-										></CirclePlus>
-										<CircleMinus
-											class="h-10 w-10"
-											onclick={() => {
-												$formData.healthLevels--;
-											}}
-										></CircleMinus>
-									</div>
-								{/snippet}
-							</Form.Control>
+							<FormControlDinoLevel label="Health levels" bind:value={$formData.healthLevels} />
 							<Form.FieldErrors />
 						</Form.Field>
 
 						<Form.Field {form} name="staminaLevels">
-							<Form.Control>
-								{#snippet children({ props })}
-									<Form.Label>Stamina levels</Form.Label>
-									<Input {...props} bind:value={$formData.staminaLevels} />
-								{/snippet}
-							</Form.Control>
+							<FormControlDinoLevel label="Stamina levels" bind:value={$formData.staminaLevels} />
 							<Form.FieldErrors />
 						</Form.Field>
 
 						<Form.Field {form} name="weightLevels">
-							<Form.Control>
-								{#snippet children({ props })}
-									<Form.Label>Weight levels</Form.Label>
-									<Input {...props} bind:value={$formData.weightLevels} />
-								{/snippet}
-							</Form.Control>
+							<FormControlDinoLevel label="Weight levels" bind:value={$formData.weightLevels} />
 							<Form.FieldErrors />
 						</Form.Field>
 
 						<Form.Field {form} name="damageLevels">
-							<Form.Control>
-								{#snippet children({ props })}
-									<Form.Label>Damage level</Form.Label>
-									<Input {...props} bind:value={$formData.damageLevels} />
-								{/snippet}
-							</Form.Control>
+							<FormControlDinoLevel label="Damage levels" bind:value={$formData.damageLevels} />
 							<Form.FieldErrors />
 						</Form.Field>
 
 						<Form.Field {form} name="oxygenLevels">
-							<Form.Control>
-								{#snippet children({ props })}
-									<Form.Label>Oxygen levels</Form.Label>
-									<Input {...props} bind:value={$formData.oxygenLevels} />
-								{/snippet}
-							</Form.Control>
+							<FormControlDinoLevel label="Oxygen levels" bind:value={$formData.oxygenLevels} />
 							<Form.FieldErrors />
 						</Form.Field>
 
 						<Form.Field {form} name="foodLevels">
-							<Form.Control>
-								{#snippet children({ props })}
-									<Form.Label>Food level</Form.Label>
-									<Input {...props} bind:value={$formData.foodLevels} />
-								{/snippet}
-							</Form.Control>
+							<FormControlDinoLevel label="Food levels" bind:value={$formData.foodLevels} />
 							<Form.FieldErrors />
 						</Form.Field>
 					</div>
 
-					<Form.Button>Submit</Form.Button>
+					<Form.Button class="mt-2 w-full">Submit</Form.Button>
 				</form>
 			</Dialog.Content>
 		</Dialog.Root>

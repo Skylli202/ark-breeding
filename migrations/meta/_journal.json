@@ -29,6 +29,20 @@
       "when": 1749945486031,
       "tag": "0003_add-default-random-to-dinos-table-primary-key",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1750001610052,
+      "tag": "0004_species table creation & link with dinos table",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1750002239541,
+      "tag": "0005_married_rawhide_kid",
+      "breakpoints": true
     }
   ]
 }
