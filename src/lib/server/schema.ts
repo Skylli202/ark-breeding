@@ -1,4 +1,4 @@
-import { serial, pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { serial, pgTable, text, timestamp, boolean, uuid, integer } from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users_table', {
   id: text('id').primaryKey(),
@@ -21,6 +21,22 @@ export const serversTable = pgTable('servers_table', {
 });
 export type InsertServer = typeof serversTable.$inferInsert;
 export type SelectServer = typeof serversTable.$inferSelect;
+
+export const dinosTable = pgTable('dinos_table', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name'),
+  userId: text('user_id').notNull().references(() => usersTable.id, { onDelete: 'cascade' }),
+  healthLevels: integer('health_levels').notNull(),
+  staminaLevels: integer('stamina_levels').notNull(),
+  oxygenLevels: integer('oxygen_levels').notNull(),
+  foodLevels: integer('food_levels').notNull(),
+  weightLevels: integer('weight_levels').notNull(),
+  damageLevels: integer('damage_levels').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().$onUpdate(() => new Date()),
+})
+export type InsertDino = typeof dinosTable.$inferInsert;
+export type SelectDino = typeof dinosTable.$inferSelect;
 
 // BetterAuth tables
 export const sessionsTable = pgTable("sessions_table", {

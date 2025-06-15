@@ -19,7 +19,7 @@ export const load = async (event) => {
   return { form: await superValidate(zod(formSchema)), servers }
 }
 
-export const actions = {
+export const actions: Actions = {
   NewServer: async (event) => {
     const session = await auth.api.getSession({ headers: event.request.headers })
     if (!session) {
