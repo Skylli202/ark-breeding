@@ -8,7 +8,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { formSchema } from './schema';
 	import { Plus } from '@lucide/svelte';
-	import DataTable from './data-table.svelte';
+	import DataTable from '$lib/components/ui/data-table/data-table.svelte';
 	import { columns } from './columns';
 
 	let open = $state(false);
