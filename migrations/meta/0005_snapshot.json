@@ -1,6 +1,6 @@
 {
-  "id": "253936f0-9a88-41ae-9cea-75cc8fc96802",
-  "prevId": "60c7e63d-88af-469e-99b8-2ba12ae952e6",
+  "id": "c2be2f54-ad62-488d-a933-992181b89de6",
+  "prevId": "253936f0-9a88-41ae-9cea-75cc8fc96802",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -202,7 +202,7 @@
             "entity_id"
           ],
           "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "cascade"
         },
         "dinos_table_user_id_users_table_id_fk": {
           "name": "dinos_table_user_id_users_table_id_fk",
