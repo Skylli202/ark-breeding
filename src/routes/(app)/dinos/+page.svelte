@@ -2,16 +2,18 @@
 	import UiLayout from '$lib/components/ui-layout.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Form from '$lib/components/ui/form/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
-	import { CircleMinus, CirclePlus, Plus } from '@lucide/svelte';
+	import { ChevronRightIcon, Plus } from '@lucide/svelte';
 	import { formSchema } from './schema';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import DataTable from '$lib/components/ui/data-table/data-table.svelte';
 	import { columns } from './columns';
 	import FormControlDinoLevel from './form-control-dino-level.svelte';
+	import type { SelectSpecies } from '$lib/server/schema';
 
 	let open = $state(false);
 	let { data } = $props();
@@ -28,6 +30,27 @@
 	const species = $derived(data.species);
 	const formData = $derived(form.form);
 	const enhance = $derived(form.enhance);
+
+	const dinoMap = $derived.by(() => {
+		const map = new Map<(typeof data.dinos)[0]['entityId'], typeof data.dinos>();
+		for (const dino of data.dinos) {
+			let tmp = map.get(dino.entityId);
+			if (tmp) {
+				tmp.push(dino);
+			} else {
+				map.set(dino.entityId, [dino]);
+			}
+		}
+		return map;
+	});
+
+	async function getSpecies(entityId: string): Promise<SelectSpecies> {
+		let r = await fetch(`/api/species/${entityId}`, { method: 'GET' });
+		if (r.ok) {
+			return r.json();
+		}
+		throw new Error(`Unable to retrieve species information for entity ID "${entityId}".`);
+	}
 </script>
 
 <UiLayout>
@@ -117,8 +140,28 @@
 	{/snippet}
 
 	{#snippet content()}
-		<div class="mt-4 mr-4 ml-12">
-			<DataTable data={data.dinos} {columns} />
+		<div class="mt-4 mr-4 ml-12 space-y-4">
+			{#each dinoMap as [entityId, dinos]}
+				{#await getSpecies(entityId) then species}
+					<Collapsible.Root class="group/collapsible">
+						<Collapsible.Trigger>
+							<div class="flex flex-row items-center gap-2">
+								<h2
+									class="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
+								>
+									{species.commonName}
+								</h2>
+								<ChevronRightIcon
+									class="mt-1 ml-auto size-12 transition-transform group-data-[state=open]/collapsible:rotate-90"
+								/>
+							</div>
+						</Collapsible.Trigger>
+						<Collapsible.Content class="mt-2">
+							<DataTable data={dinos} {columns} />
+						</Collapsible.Content>
+					</Collapsible.Root>
+				{/await}
+			{/each}
 		</div>
 	{/snippet}
 </UiLayout>
