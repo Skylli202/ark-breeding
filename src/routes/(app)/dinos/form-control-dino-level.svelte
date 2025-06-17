@@ -13,6 +13,7 @@
 		<div class="relative w-full max-w-sm">
 			<div class="absolute inset-y-0 right-0 flex items-center pr-1">
 				<Button
+					tabindex={-1}
 					variant="ghost"
 					size="icon"
 					class="size-6 cursor-pointer"
@@ -23,6 +24,7 @@
 					<CirclePlus class="size-5" />
 				</Button>
 				<Button
+					tabindex={-1}
 					variant="ghost"
 					size="icon"
 					class="size-6 cursor-pointer"
