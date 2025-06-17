@@ -1,11 +1,3 @@
-<script>
-	import UiLayout from '$lib/components/ui-layout.svelte';
+<script lang="ts">
+	// this file must exist otherwise GET on / will return a 404
 </script>
-
-<UiLayout>
-	{#snippet header()}{/snippet}
-
-	{#snippet content()}
-		<p>This is the preview environment.</p>
-	{/snippet}
-</UiLayout>
