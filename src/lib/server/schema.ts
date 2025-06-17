@@ -43,6 +43,8 @@ export const speciesTable = pgTable('species_table', {
   entityId: text('entity_id').primaryKey(), // Ark BP
   commonName: text('common_name'),
 })
+export type InsertSpecies = typeof speciesTable.$inferInsert;
+export type SelectSpecies = typeof speciesTable.$inferSelect;
 
 // BetterAuth tables
 export const sessionsTable = pgTable("sessions_table", {
