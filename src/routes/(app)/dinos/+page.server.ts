@@ -7,6 +7,7 @@ import { formSchema } from "./schema";
 import { db } from "$lib/server/db";
 import { dinosTable, speciesTable } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
+import { DeleteDino } from "$lib/server/dinos_form/form_action";
 
 export const load: PageServerLoad = async (event) => {
   const session = await auth.api.getSession(event.request)
@@ -46,5 +47,6 @@ export const actions: Actions = {
     })
     console.log(`created: new dino created with success`)
     return { form }
-  }
+  },
+  DeleteDino
 }
