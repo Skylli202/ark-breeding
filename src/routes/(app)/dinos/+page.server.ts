@@ -16,7 +16,7 @@ export const load: PageServerLoad = async (event) => {
 
   return {
     form: await superValidate(zod(formSchema)),
-    dinos: await db.select().from(dinosTable).where(eq(dinosTable.userId, session.user.id)),
+    dinos: await db.select().from(dinosTable).where(eq(dinosTable.userId, session.user.id)).orderBy(dinosTable.entityId),
     species: await db.select().from(speciesTable).orderBy(speciesTable.commonName)
   }
 }
