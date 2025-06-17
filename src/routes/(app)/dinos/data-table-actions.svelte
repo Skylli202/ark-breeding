@@ -2,6 +2,8 @@
 	import EllipsisIcon from '@lucide/svelte/icons/ellipsis';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import { Trash2 } from '@lucide/svelte';
+	import { enhance } from '$app/forms';
 
 	let { id }: { id: string } = $props();
 </script>
@@ -17,15 +19,25 @@
 			{/snippet}
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
-			<DropdownMenu.Group>
-				<DropdownMenu.Label>Actions</DropdownMenu.Label>
-				<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
-					Copy payment ID
-				</DropdownMenu.Item>
-			</DropdownMenu.Group>
-			<DropdownMenu.Separator />
-			<DropdownMenu.Item>View customer</DropdownMenu.Item>
-			<DropdownMenu.Item>View payment details</DropdownMenu.Item>
+			<DropdownMenu.Item variant="destructive">
+				<form
+					method="POST"
+					action="?/DeleteDino"
+					use:enhance={() => {
+						return ({ result, update }) => {
+							if (result.type === 'success') {
+								update();
+							}
+						};
+					}}
+				>
+        <input hidden value={id} name="id"/>
+					<button type="submit" class="flex flex-row items-center gap-2">
+						<Trash2 />
+						Delete
+					</button>
+				</form>
+			</DropdownMenu.Item>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
 </div>
