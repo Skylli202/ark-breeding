@@ -36,6 +36,7 @@ export const actions: Actions = {
     await db.insert(dinosTable).values({
       name: form.data.name,
       userId: session.user.id,
+      entityId: form.data.entityId,
       healthLevels: form.data.healthLevels,
       staminaLevels: form.data.staminaLevels,
       oxygenLevels: form.data.oxygenLevels,
