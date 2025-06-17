@@ -5,15 +5,19 @@
 	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Form from '$lib/components/ui/form/index.js';
-	import * as Select from '$lib/components/ui/select/index.js';
-	import { ChevronRightIcon, Plus } from '@lucide/svelte';
+	import * as Popover from '$lib/components/ui/popover/index.js';
+	import * as Command from '$lib/components/ui/command/index.js';
+	import { CheckIcon, ChevronRightIcon, ChevronsUpDownIcon, Plus } from '@lucide/svelte';
 	import { formSchema } from './schema';
+	import { useId } from 'bits-ui';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import DataTable from '$lib/components/ui/data-table/data-table.svelte';
 	import { columns } from './columns';
 	import FormControlDinoLevel from './form-control-dino-level.svelte';
 	import type { SelectSpecies } from '$lib/server/schema';
+	import { tick } from 'svelte';
+	import { cn } from '$lib/utils';
 
 	let open = $state(false);
 	let { data } = $props();
@@ -30,6 +34,14 @@
 	const species = $derived(data.species);
 	const formData = $derived(form.form);
 	const enhance = $derived(form.enhance);
+	let comboboxOpen = $state(false);
+	function closeAndFocusTrigger(triggerId: string) {
+		comboboxOpen = false;
+		tick().then(() => {
+			document.getElementById(triggerId)?.focus();
+		});
+	}
+	const triggerId = useId();
 
 	const dinoMap = $derived.by(() => {
 		const map = new Map<(typeof data.dinos)[0]['entityId'], typeof data.dinos>();
@@ -80,24 +92,52 @@
 					</Form.Field>
 
 					<Form.Field {form} name="entityId" class="w-full">
-						<Form.Control>
-							{#snippet children({ props })}
-								<Form.Label>Species</Form.Label>
-								<Select.Root type="single" bind:value={$formData.entityId} name={props.name}>
-									<Select.Trigger {...props} class="w-full">
-										{$formData.entityId
-											? species.find((s) => s.entityId === $formData.entityId)?.commonName
-											: 'Select the specie of your dino!'}
-									</Select.Trigger>
-									<Select.Content>
-										{#each species as specie}
-											<!-- HACK: commonName can be null because the column ain't NOT NULL but I do not think that's a real thing -->
-											<Select.Item value={specie.entityId} label={specie.commonName ?? ''} />
+						<Popover.Root bind:open={comboboxOpen}>
+							<Form.Control id={triggerId}>
+								{#snippet children({ props })}
+									<Form.Label>Species</Form.Label>
+									<Popover.Trigger
+										class={cn(
+											buttonVariants({ variant: 'outline' }),
+											'w-full justify-between',
+											!$formData.entityId && 'text-muted-foreground'
+										)}
+										role="combobox"
+										{...props}
+									>
+										{species.find((f) => f.entityId === $formData.entityId)?.commonName ??
+											'Select language'}
+										<ChevronsUpDownIcon class="opacity-50" />
+									</Popover.Trigger>
+									<input hidden value={$formData.entityId} name={props.name} />
+								{/snippet}
+							</Form.Control>
+							<Popover.Content class="min-w-full p-0">
+								<Command.Root class="">
+									<Command.Input autofocus placeholder="Search language..." class="h-9" />
+									<Command.Empty class="">No language found.</Command.Empty>
+									<Command.Group value="species">
+										{#each species as { entityId, commonName } (entityId)}
+											<Command.Item
+												value={entityId}
+												onSelect={() => {
+													$formData.entityId = entityId;
+													closeAndFocusTrigger(triggerId);
+												}}
+											>
+												{commonName}
+												<CheckIcon
+													class={cn(
+														'ml-auto',
+														entityId !== $formData.entityId && 'text-transparent'
+													)}
+												/>
+											</Command.Item>
 										{/each}
-									</Select.Content>
-								</Select.Root>
-							{/snippet}
-						</Form.Control>
+									</Command.Group>
+								</Command.Root>
+							</Popover.Content>
+						</Popover.Root>
 						<Form.FieldErrors />
 					</Form.Field>
 
