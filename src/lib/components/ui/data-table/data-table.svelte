@@ -54,7 +54,7 @@
 
 <div class="rounded-md border">
 	<Table.Root>
-		<Table.Header>
+		<Table.Header class="bg-muted sticky top-0 z-10">
 			{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
 				<Table.Row>
 					{#each headerGroup.headers as header (header.id)}
