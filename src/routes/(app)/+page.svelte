@@ -1,3 +1,5 @@
 <script lang="ts">
-	// this file must exist otherwise GET on / will return a 404
+	import SiteHeader from '$lib/components/site-header.svelte';
 </script>
+
+<SiteHeader />
