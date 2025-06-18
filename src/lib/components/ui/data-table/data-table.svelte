@@ -52,7 +52,7 @@
 	});
 </script>
 
-<div class="rounded-md border">
+<div class="w-full rounded-md border">
 	<Table.Root>
 		<Table.Header class="bg-muted sticky top-0 z-10">
 			{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
