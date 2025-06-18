@@ -2,4 +2,4 @@
 	import SiteHeader from '$lib/components/site-header.svelte';
 </script>
 
-<SiteHeader />
+<SiteHeader children={null} />
