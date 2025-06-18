@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import AppSidebar from '$lib/components/app-sidebar.svelte';
-	import SiteHeader from '$lib/components/site-header.svelte';
 
 	let { data, children } = $props();
 </script>
@@ -11,13 +10,6 @@
 >
 	<AppSidebar variant="inset" session={data.session} />
 	<Sidebar.Inset>
-		<SiteHeader />
-		<div class="flex flex-1 flex-col">
-			<div class="@container/main flex flex-1 flex-col gap-2">
-				<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-					{@render children()}
-				</div>
-			</div>
-		</div>
+		{@render children()}
 	</Sidebar.Inset>
 </Sidebar.Provider>
