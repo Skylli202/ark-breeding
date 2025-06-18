@@ -6,6 +6,8 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import type { Session } from '$lib/auth-client';
+	import { authClient } from '$lib/auth-client';
+	import { invalidateAll } from '$app/navigation';
 
 	let { session }: { session: Session } = $props();
 
@@ -74,7 +76,12 @@
 					</DropdownMenu.Item>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item>
+				<DropdownMenu.Item
+					onclick={async () => {
+						await authClient.signOut();
+						invalidateAll();
+					}}
+				>
 					<LogoutIcon />
 					Log out
 				</DropdownMenu.Item>
