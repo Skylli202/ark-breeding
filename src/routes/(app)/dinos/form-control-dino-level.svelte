@@ -18,6 +18,9 @@
 					size="icon"
 					class="size-6 cursor-pointer"
 					onclick={() => {
+						if (typeof value == 'string') {
+							value = parseInt(value, 10);
+						}
 						value++;
 					}}
 				>
@@ -29,6 +32,9 @@
 					size="icon"
 					class="size-6 cursor-pointer"
 					onclick={() => {
+						if (typeof value == 'string') {
+							value = parseInt(value, 10);
+						}
 						value--;
 					}}
 				>
