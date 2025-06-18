@@ -22,7 +22,8 @@
 		open: boolean;
 	}
 
-	let { data, species, open }: Props = $props();
+	let { data, species, open = $bindable() }: Props = $props();
+
 	const triggerId = useId();
 
 	const form = superForm(data.form, {

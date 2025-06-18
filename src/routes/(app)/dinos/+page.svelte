@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
+	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { ChevronRightIcon, PlusIcon } from '@lucide/svelte';
@@ -49,7 +49,7 @@
 					can give your tame a name. Click save when you're done.
 				</Dialog.Description>
 			</Dialog.Header>
-			<FormNewDino {data} {species} {open} />
+			<FormNewDino {data} {species} bind:open />
 		</Dialog.Content>
 	</Dialog.Root>
 </SiteHeader>
