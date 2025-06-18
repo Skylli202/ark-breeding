@@ -6,7 +6,11 @@ import DataTableBasicHeaderButton from "$lib/components/ui/data-table/data-table
 
 export const columns: ColumnDef<SelectDino>[] = [
   {
-    header: 'Name',
+    header: ({ column }) =>
+      renderComponent(DataTableBasicHeaderButton, {
+        title: 'Name',
+        onclick: column.getToggleSortingHandler(),
+      }),
     accessorKey: 'name'
   },
   {
