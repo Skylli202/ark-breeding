@@ -4,6 +4,7 @@
 	import InnerShadowTopIcon from '@tabler/icons-svelte/icons/inner-shadow-top';
 	import SettingsIcon from '@tabler/icons-svelte/icons/settings';
 	import UsersIcon from '@tabler/icons-svelte/icons/users';
+	import IconServerCog from '@tabler/icons-svelte/icons/server-cog';
 	import NavMain from './nav-main.svelte';
 	import NavSecondary from './nav-secondary.svelte';
 	import NavUser from './nav-user.svelte';
@@ -14,9 +15,14 @@
 	const data = {
 		navMain: [
 			{
-				title: 'Clan',
-				url: '#',
+				title: 'Clans',
+				url: '/clans',
 				icon: UsersIcon
+			},
+			{
+				title: 'Servers',
+				url: '/servers',
+				icon: IconServerCog
 			},
 			{
 				title: 'Dinos',
