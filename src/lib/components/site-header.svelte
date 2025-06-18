@@ -3,6 +3,8 @@
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import { GithubIcon } from '@lucide/svelte';
+
+	let { children } = $props();
 </script>
 
 <header
@@ -11,6 +13,7 @@
 	<div class="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
 		<Sidebar.Trigger class="-ml-1" />
 		<Separator orientation="vertical" class="mx-2 data-[orientation=vertical]:h-4" />
+		{@render children?.()}
 		<!-- TODO: replace the header name -->
 		<!-- <h1 class="text-base font-medium">TOBE REPLACED</h1> -->
 		<div class="ml-auto flex items-center gap-2">
