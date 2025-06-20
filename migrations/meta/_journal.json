@@ -43,6 +43,20 @@
       "when": 1750002239541,
       "tag": "0005_married_rawhide_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1750382721417,
+      "tag": "0006_create clans table && Many-To-Many relationship with users table",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1750383118873,
+      "tag": "0007_clean_quasimodo",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,5 @@
-import { serial, pgTable, text, timestamp, boolean, uuid, integer, pgEnum } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
+import { serial, pgTable, text, timestamp, boolean, uuid, integer, primaryKey } from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users_table', {
   id: text('id').primaryKey(),
@@ -9,6 +10,7 @@ export const usersTable = pgTable('users_table', {
   createdAt: timestamp('created_at').$defaultFn(() => /* @__PURE__ */ new Date()).notNull(),
   updatedAt: timestamp('updated_at').$defaultFn(() => /* @__PURE__ */ new Date()).notNull()
 });
+export const usersRelations = relations(usersTable, ({ many }) => ({ usersToClans: many(usersToClansTable) }))
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
 
@@ -45,6 +47,29 @@ export const speciesTable = pgTable('species_table', {
 })
 export type InsertSpecies = typeof speciesTable.$inferInsert;
 export type SelectSpecies = typeof speciesTable.$inferSelect;
+
+export const clansTable = pgTable('clans_table', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+})
+export const clansRelations = relations(clansTable, ({ many }) => ({ usersToClans: many(usersToClansTable) }));
+export type InsertClan = typeof clansTable.$inferInsert
+export type SelectClan = typeof clansTable.$inferSelect
+
+export const usersToClansTable = pgTable(
+  'users_to_clans_table',
+  {
+    userId: text('user_id').notNull().references(() => usersTable.id),
+    clanId: uuid('clan_id').notNull().references(() => clansTable.id),
+  },
+  (t) => [
+    primaryKey({ columns: [t.userId, t.clanId] })
+  ]
+)
+export const usersToClansRelations = relations(usersToClansTable, ({ one }) => ({
+  clan: one(clansTable, { fields: [usersToClansTable.clanId], references: [clansTable.id] }),
+  user: one(usersTable, { fields: [usersToClansTable.userId], references: [usersTable.id], }),
+}))
 
 // BetterAuth tables
 export const sessionsTable = pgTable("sessions_table", {
