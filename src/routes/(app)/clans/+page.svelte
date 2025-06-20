@@ -50,7 +50,7 @@
 						<Badge
 							contenteditable
 							variant="destructive"
-							class="h-6 [&>svg]:size-4"
+							class="h-6 cursor-pointer [&>svg]:size-4"
 							onclick={() => {
 								alert('Are you sure you wanna leave the clan? :(');
 							}}
@@ -72,7 +72,13 @@
 				</Card.Content>
 				<Card.Footer class="flex-col items-start gap-1.5 text-sm">
 					<div class="line-clamp-1 flex items-center gap-2 font-medium">
-						Invite new player <Button size="sm" variant="outline"><Plus class="size-4" /></Button>
+						Invite new player <Button
+							size="sm"
+							variant="outline"
+							onclick={() => alert('add a player')}
+						>
+							<Plus class="size-4" />
+						</Button>
 					</div>
 					<div class="text-muted-foreground">Your dino libray is shared with your clan.</div>
 					<div class="text-muted-foreground">
