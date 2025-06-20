@@ -4,7 +4,6 @@
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { formSchema } from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { Button } from '$lib/components/ui/button';
 
 	interface Props {
 		data: { form: SuperValidated<Infer<typeof formSchema>> };

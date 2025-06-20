@@ -10,6 +10,10 @@
 >
 	<AppSidebar variant="inset" session={data.session} />
 	<Sidebar.Inset>
-		{@render children()}
+		<div class="flex flex-1 flex-col">
+			<div class="@container/main flex flex-1 flex-col">
+				{@render children()}
+			</div>
+		</div>
 	</Sidebar.Inset>
 </Sidebar.Provider>

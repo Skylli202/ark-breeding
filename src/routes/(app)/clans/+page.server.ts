@@ -6,8 +6,6 @@ import { fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/server/db.js'
 import { clansTable, usersToClansTable } from '$lib/server/schema.js'
 import { eq } from 'drizzle-orm'
-import { neon, Pool } from '@neondatabase/serverless'
-import { DATABASE_URL } from '$env/static/private'
 
 export const load = async (event) => {
   const session = await auth.api.getSession(event.request)
@@ -15,21 +13,21 @@ export const load = async (event) => {
     return redirect(307, '/signin')
   }
 
-  let Clans = await db
+  let clans = await db
     .select()
     .from(clansTable)
     .rightJoin(usersToClansTable, eq(clansTable.id, usersToClansTable.clanId))
     .where(eq(usersToClansTable.userId, session.user.id))
 
-  const tmp = Clans.map(c => c.clans_table?.id).filter(s => s !== null && s !== undefined)
+  const clanIds = clans.map(c => c.clans_table?.id).filter(s => s !== null && s !== undefined)
 
   // For my dummies, that's just gettin' all clans who the user is part of.
   // And cuz' I'm a dummy myself, I'm doing it in two queries.
-  let clans = await db
+  let clansAndUsers = await db
     .query
     .clansTable
     .findMany({
-      where: ({ id }, { inArray }) => inArray(id, tmp),
+      where: ({ id }, { inArray }) => inArray(id, clanIds),
       with: {
         usersToClans: {
           where: ({ userId }, { eq }) => eq(userId, session.user.id),
@@ -40,7 +38,7 @@ export const load = async (event) => {
 
   return {
     form: await superValidate(zod(formSchema)),
-    clans,
+    clans: clansAndUsers,
   }
 }
 
@@ -60,7 +58,7 @@ export const actions = {
 
     await db.transaction(async (tx) => {
       let [clan] = await tx.insert(clansTable).values({ name: form.data.name }).returning()
-      await tx.insert(usersToClansTable).values({ clanId: clan.id, userId: session.user.id }).returning()
+      await tx.insert(usersToClansTable).values({ clanId: clan.id, userId: session.user.id })
       console.log(`successfully inserted a new clan in database: ${JSON.stringify(clan)}`)
     })
 

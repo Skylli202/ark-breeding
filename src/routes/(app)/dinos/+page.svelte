@@ -53,33 +53,29 @@
 		</Dialog.Content>
 	</Dialog.Root>
 </SiteHeader>
-<div class="flex flex-1 flex-col">
-	<div class="@container/main flex flex-1 flex-col gap-2">
-		<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-			<div class="flex w-full flex-col items-start space-y-8 px-4 lg:px-6">
-				<!-- <div class="mt-4 mr-4 ml-12 space-y-4"> -->
-				{#each dinoMap as [entityId, dinos]}
-					{#await getSpecies(entityId) then species}
-						<Collapsible.Root class="group/collapsible w-full" open={true}>
-							<Collapsible.Trigger>
-								<div class="flex flex-row items-center">
-									<h2
-										class="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
-									>
-										{species.commonName}
-									</h2>
-									<ChevronRightIcon
-										class="mt-1 ml-auto size-10 transition-transform group-data-[state=open]/collapsible:rotate-90"
-									/>
-								</div>
-							</Collapsible.Trigger>
-							<Collapsible.Content class="mt-2">
-								<DataTable data={dinos} {columns} />
-							</Collapsible.Content>
-						</Collapsible.Root>
-					{/await}
-				{/each}
-			</div>
-		</div>
+<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+	<div class="flex w-full flex-col items-start space-y-8 px-4 lg:px-6">
+		<!-- <div class="mt-4 mr-4 ml-12 space-y-4"> -->
+		{#each dinoMap as [entityId, dinos]}
+			{#await getSpecies(entityId) then species}
+				<Collapsible.Root class="group/collapsible w-full" open={true}>
+					<Collapsible.Trigger>
+						<div class="flex flex-row items-center">
+							<h2
+								class="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
+							>
+								{species.commonName}
+							</h2>
+							<ChevronRightIcon
+								class="mt-1 ml-auto size-10 transition-transform group-data-[state=open]/collapsible:rotate-90"
+							/>
+						</div>
+					</Collapsible.Trigger>
+					<Collapsible.Content class="mt-2">
+						<DataTable data={dinos} {columns} />
+					</Collapsible.Content>
+				</Collapsible.Root>
+			{/await}
+		{/each}
 	</div>
 </div>
