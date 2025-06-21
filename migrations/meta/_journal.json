@@ -78,6 +78,20 @@
       "when": 1750465873118,
       "tag": "0010_striped_malcolm_colcord",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1750469013764,
+      "tag": "0011_old_blazing_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1750472817979,
+      "tag": "0012_magical_redwing",
+      "breakpoints": true
     }
   ]
 }

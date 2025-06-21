@@ -1,0 +1,2 @@
+ALTER TABLE "join_clan_codes_table" ADD COLUMN "code" char(6) DEFAULT LEFT(md5(random()::text), 6) NOT NULL;--> statement-breakpoint
+ALTER TABLE "join_clan_codes_table" ADD CONSTRAINT "join_clan_codes_table_code_unique" UNIQUE("code");

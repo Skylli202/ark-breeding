@@ -8,6 +8,7 @@
 	import FormNewClan from './form-new-clan.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import FormJoinClan from './form-join-clan.svelte';
+	import FormNewJoinClanCode from './form-new-join-clan-code.svelte';
 
 	let openNewClanDialog = $state(false);
 	let openJoinClanDialog = $state(false);
@@ -66,14 +67,10 @@
 							{clan.usersToClans.length}
 						</Badge>
 						{#if clan.ownerId === session.user.id}
-							<form method="post" action="?/DeleteClan">
+							<form method="post" action="?/DeleteClan" class="h-6">
 								<input hidden value={clan.id} name="id" />
 								<button type="submit">
-									<Badge
-										contenteditable
-										variant="destructive"
-										class="h-6 cursor-pointer [&>svg]:size-4"
-									>
+									<Badge variant="destructive" class="h-6 cursor-pointer [&>svg]:size-4">
 										<X />
 									</Badge>
 								</button>
@@ -93,15 +90,21 @@
 					{/if}
 				</Card.Content>
 				<Card.Footer class="flex-col items-start gap-1.5 text-sm">
-					<div class="line-clamp-1 flex items-center gap-2 font-medium">
-						Invite new player <Button
-							size="sm"
-							variant="outline"
-							onclick={() => alert('add a player')}
-						>
-							<Plus class="size-4" />
-						</Button>
-					</div>
+					<Dialog.Root>
+						<Dialog.Trigger class="line-clamp-1 flex items-center gap-2 font-medium">
+							Invite new player
+							<Button size="sm" variant="outline">
+								<Plus class="size-4" />
+							</Button>
+						</Dialog.Trigger>
+						<Dialog.Content class="sm:max-w-[425px]">
+							<Dialog.Header>
+								<Dialog.Title>Invite player</Dialog.Title>
+								<Dialog.Description>Share this code to your friend!</Dialog.Description>
+							</Dialog.Header>
+							<FormNewJoinClanCode data={{ form: data.formGenJoinClanCode }} clanId={clan.id} />
+						</Dialog.Content>
+					</Dialog.Root>
 					<div class="text-muted-foreground">
 						Your dino libray is shared with your clan. The mutualized library has {500 +
 							Math.floor(Math.random() * 1000)} dinos!

@@ -1,10 +1,10 @@
 import { superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
-import { formJoinClanSchema, formNewClanSchema } from './schema.js'
+import { formGenJoinClanCodeSchema, formJoinClanSchema, formNewClanSchema } from './schema.js'
 import { auth } from '$lib/server/auth.js'
 import { fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/server/db.js'
-import { clansTable, usersToClansTable } from '$lib/server/schema.js'
+import { clansTable, joinClanCodesTable, usersToClansTable, type InsertJoinClanCode } from '$lib/server/schema.js'
 import { eq } from 'drizzle-orm'
 
 export const load = async (event) => {
@@ -39,6 +39,7 @@ export const load = async (event) => {
   return {
     formNewClan: await superValidate(zod(formNewClanSchema)),
     formJoinClan: await superValidate(zod(formJoinClanSchema)),
+    formGenJoinClanCode: await superValidate(zod(formGenJoinClanCodeSchema)),
     clans: clansAndUsers,
   }
 }
@@ -99,6 +100,39 @@ export const actions = {
       console.error(`unauthorized: user [${session.user.id}] "${session.user.email}" tried to delete the clan [${id}] but is NOT the owner.`)
       return fail(401)
     }
+  },
+  GenJoinClanCode: async (event) => {
+    const session = await auth.api.getSession(event.request)
+    if (!session) {
+      console.error(`unauthorized: request denied on create clan`)
+      return fail(401)
+    }
+
+    const form = await superValidate(event, zod(formGenJoinClanCodeSchema))
+    if (!form.valid) {
+      console.error(`bad request: cannot generate a join clan code with incorrect form data`)
+      return fail(400, { form })
+    }
+
+    const { clanId } = form.data
+    const joinCodes = await db
+      .insert(joinClanCodesTable)
+      .values(
+        {
+          clanId,
+          inviterId: session.user.id
+        }
+      )
+      .returning();
+    if (joinCodes.length !== 1) {
+      console.error(`internal server error: generation of join clan code generated ${joinCodes.length} codes, expected the generation of only one for the clan ID [${clanId}]; generation requested by user ID [${session.user.id}].`)
+      return fail(500)
+    }
+
+    const joinCode = joinCodes[0]
+    form.data.code = joinCode.code
+
+    return { form }
   },
   NewClan: async (event) => {
     const session = await auth.api.getSession(event.request)

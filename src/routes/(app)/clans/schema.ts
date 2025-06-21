@@ -6,3 +6,7 @@ export const formNewClanSchema = z.object({
 export const formJoinClanSchema = z.object({
   code: z.string().min(6).max(6)
 })
+export const formGenJoinClanCodeSchema = z.object({
+  clanId: z.string().nonempty(),
+  code: z.string().optional(),
+})

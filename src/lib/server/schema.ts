@@ -1,5 +1,5 @@
-import { relations } from 'drizzle-orm';
-import { serial, pgTable, text, timestamp, boolean, uuid, integer, primaryKey } from 'drizzle-orm/pg-core';
+import { relations, sql } from 'drizzle-orm';
+import { serial, pgTable, text, timestamp, boolean, uuid, integer, primaryKey, char } from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users_table', {
   id: text('id').primaryKey(),
@@ -80,6 +80,22 @@ export const usersToClansRelations = relations(usersToClansTable, ({ one }) => (
   clan: one(clansTable, { fields: [usersToClansTable.clanId], references: [clansTable.id] }),
   user: one(usersTable, { fields: [usersToClansTable.userId], references: [usersTable.id], }),
 }))
+
+export const joinClanCodesTable = pgTable('join_clan_codes_table', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  clanId: uuid('clan_id').notNull().references(() => clansTable.id, { onDelete: 'cascade' }),
+  code: char('code', { length: 6 }).notNull().unique().default(sql`LEFT(md5(random()::text), 6)`),
+  inviterId: text('inviter_id').notNull().references(() => usersTable.id, { onDelete: 'cascade' }),
+  inviteeIds: text('invitee_ids').references(() => usersTable.id, { onDelete: 'cascade' }).array().default([]),
+  createdAt: timestamp('created_at').$defaultFn(() => /* @__PURE__ */ new Date()).notNull(),
+  updatedAt: timestamp('updated_at').$defaultFn(() => /* @__PURE__ */ new Date()).notNull()
+})
+export const joinClanCodesRelations = relations(joinClanCodesTable, ({ one, many }) => ({
+  inviter: one(usersTable, { fields: [joinClanCodesTable.inviterId], references: [usersTable.id], }),
+  invitees: many(usersTable),
+}))
+export type InsertJoinClanCode = typeof joinClanCodesTable.$inferInsert
+export type SelectJoinClanCode = typeof joinClanCodesTable.$inferSelect
 
 // BetterAuth tables
 export const sessionsTable = pgTable("sessions_table", {
