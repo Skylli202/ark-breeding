@@ -10,7 +10,10 @@ export const usersTable = pgTable('users_table', {
   createdAt: timestamp('created_at').$defaultFn(() => /* @__PURE__ */ new Date()).notNull(),
   updatedAt: timestamp('updated_at').$defaultFn(() => /* @__PURE__ */ new Date()).notNull()
 });
-export const usersRelations = relations(usersTable, ({ many }) => ({ usersToClans: many(usersToClansTable) }))
+export const usersRelations = relations(usersTable, ({ many }) => ({
+  usersToClans: many(usersToClansTable),
+  ownedClans: many(clansTable),
+}))
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
 
@@ -51,8 +54,15 @@ export type SelectSpecies = typeof speciesTable.$inferSelect;
 export const clansTable = pgTable('clans_table', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
+  ownerId: text('owner_id').notNull().default('XXX'),
 })
-export const clansRelations = relations(clansTable, ({ many }) => ({ usersToClans: many(usersToClansTable) }));
+export const clansRelations = relations(clansTable, ({ many, one }) => ({
+  usersToClans: many(usersToClansTable),
+  owner: one(usersTable, {
+    fields: [clansTable.ownerId],
+    references: [usersTable.id],
+  })
+}));
 export type InsertClan = typeof clansTable.$inferInsert
 export type SelectClan = typeof clansTable.$inferSelect
 

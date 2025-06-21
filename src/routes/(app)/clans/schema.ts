@@ -1,5 +1,8 @@
 import { z } from "zod";
 
-export const formSchema = z.object({
+export const formNewClanSchema = z.object({
   name: z.string().min(2)
+})
+export const formJoinClanSchema = z.object({
+  code: z.string().min(6).max(6)
 })

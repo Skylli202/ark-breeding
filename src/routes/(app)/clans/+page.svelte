@@ -4,18 +4,20 @@
 	import { Button } from '$lib/components/ui/button';
 	import SiteHeader from '$lib/components/site-header.svelte';
 	import { buttonVariants } from '$lib/components/ui/button';
-	import { BadgeCheckIcon, Plus, PlusIcon, User, X } from '@lucide/svelte';
+	import { Plus, PlusIcon, User, X } from '@lucide/svelte';
 	import FormNewClan from './form-new-clan.svelte';
-	import SectionCards from './section-cards.svelte';
 	import { Badge } from '$lib/components/ui/badge';
+	import FormJoinClan from './form-join-clan.svelte';
 
-	let open = $state(false);
+	let openNewClanDialog = $state(false);
+	let openJoinClanDialog = $state(false);
 	let { data } = $props();
+	let session = $derived(data.session);
 	let clans = $derived(data.clans);
 </script>
 
 <SiteHeader>
-	<Dialog.Root bind:open>
+	<Dialog.Root bind:open={openNewClanDialog}>
 		<Dialog.Trigger class={buttonVariants({ variant: 'outline', size: 'sm' })}>
 			<PlusIcon />
 			<span class="hidden lg:inline">Add clan</span>
@@ -27,7 +29,23 @@
 					Create a new clan, give a name and invite your friends! Click save when you're done.
 				</Dialog.Description>
 			</Dialog.Header>
-			<FormNewClan {data} bind:open />
+			<FormNewClan data={{ form: data.formNewClan }} bind:open={openNewClanDialog} />
+		</Dialog.Content>
+	</Dialog.Root>
+	<Dialog.Root bind:open={openJoinClanDialog}>
+		<Dialog.Trigger class={buttonVariants({ variant: 'outline', size: 'sm' })}>
+			<PlusIcon />
+			<span class="hidden lg:inline">Join clan</span>
+		</Dialog.Trigger>
+		<Dialog.Content class="sm:max-w-[425px]">
+			<Dialog.Header>
+				<Dialog.Title>Join clan</Dialog.Title>
+				<Dialog.Description>
+					Paste the code your friends gave you down there! And join their clan to share your dinos
+					with them!
+				</Dialog.Description>
+			</Dialog.Header>
+			<FormJoinClan data={{ form: data.formJoinClan }} bind:open={openJoinClanDialog} />
 		</Dialog.Content>
 	</Dialog.Root>
 </SiteHeader>
@@ -47,16 +65,20 @@
 							<User />
 							{clan.usersToClans.length}
 						</Badge>
-						<Badge
-							contenteditable
-							variant="destructive"
-							class="h-6 cursor-pointer [&>svg]:size-4"
-							onclick={() => {
-								alert('Are you sure you wanna leave the clan? :(');
-							}}
-						>
-							<X />
-						</Badge>
+						{#if clan.ownerId === session.user.id}
+							<form method="post" action="?/DeleteClan">
+								<input hidden value={clan.id} name="id" />
+								<button type="submit">
+									<Badge
+										contenteditable
+										variant="destructive"
+										class="h-6 cursor-pointer [&>svg]:size-4"
+									>
+										<X />
+									</Badge>
+								</button>
+							</form>
+						{/if}
 					</Card.Action>
 				</Card.Header>
 				<Card.Content>
@@ -80,9 +102,9 @@
 							<Plus class="size-4" />
 						</Button>
 					</div>
-					<div class="text-muted-foreground">Your dino libray is shared with your clan.</div>
 					<div class="text-muted-foreground">
-						The mutualized library has {500 + Math.floor(Math.random() * 1000)} dinos!
+						Your dino libray is shared with your clan. The mutualized library has {500 +
+							Math.floor(Math.random() * 1000)} dinos!
 					</div>
 				</Card.Footer>
 			</Card.Root>

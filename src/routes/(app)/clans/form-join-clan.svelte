@@ -2,18 +2,18 @@
 	import * as Form from '$lib/components/ui/form/index';
 	import { Input } from '$lib/components/ui/input';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { formNewClanSchema } from './schema';
+	import { formJoinClanSchema } from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	interface Props {
-		data: { form: SuperValidated<Infer<typeof formNewClanSchema>> };
+		data: { form: SuperValidated<Infer<typeof formJoinClanSchema>> };
 		open: boolean;
 	}
 
 	let { data, open = $bindable() }: Props = $props();
 
 	const form = superForm(data.form, {
-		validators: zodClient(formNewClanSchema),
+		validators: zodClient(formJoinClanSchema),
 		onUpdated(event) {
 			if (!event.form.valid) {
 				return;
@@ -27,11 +27,11 @@
 </script>
 
 <form method="POST" action="?/NewClan" use:enhance>
-	<Form.Field {form} name="name">
+	<Form.Field {form} name="code">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Name</Form.Label>
-				<Input {...props} bind:value={$formData.name} />
+				<Form.Label>Code</Form.Label>
+				<Input {...props} bind:value={$formData.code} />
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
