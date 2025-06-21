@@ -54,7 +54,7 @@ export type SelectSpecies = typeof speciesTable.$inferSelect;
 export const clansTable = pgTable('clans_table', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
-  ownerId: text('owner_id').notNull().default('XXX'),
+  ownerId: text('owner_id').notNull().references(() => usersTable.id),
 })
 export const clansRelations = relations(clansTable, ({ many, one }) => ({
   usersToClans: many(usersToClansTable),

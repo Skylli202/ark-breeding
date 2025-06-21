@@ -114,7 +114,7 @@ export const actions = {
     }
 
     await db.transaction(async (tx) => {
-      let [clan] = await tx.insert(clansTable).values({ name: form.data.name }).returning()
+      let [clan] = await tx.insert(clansTable).values({ name: form.data.name, ownerId: session.user.id }).returning()
       await tx.insert(usersToClansTable).values({ clanId: clan.id, userId: session.user.id })
       console.log(`successfully inserted a new clan in database: ${JSON.stringify(clan)}`)
     })

@@ -71,6 +71,13 @@
       "when": 1750464228295,
       "tag": "0009_deep_sage",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1750465873118,
+      "tag": "0010_striped_malcolm_colcord",
+      "breakpoints": true
     }
   ]
 }

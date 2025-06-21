@@ -20,7 +20,7 @@
 	<Dialog.Root bind:open={openNewClanDialog}>
 		<Dialog.Trigger class={buttonVariants({ variant: 'outline', size: 'sm' })}>
 			<PlusIcon />
-			<span class="hidden lg:inline">Add clan</span>
+			<span class="hidden lg:inline">Create clan</span>
 		</Dialog.Trigger>
 		<Dialog.Content class="sm:max-w-[425px]">
 			<Dialog.Header>

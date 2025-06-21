@@ -1,0 +1,2 @@
+ALTER TABLE "clans_table" ALTER COLUMN "owner_id" DROP DEFAULT;--> statement-breakpoint
+ALTER TABLE "clans_table" ADD CONSTRAINT "clans_table_owner_id_users_table_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users_table"("id") ON DELETE no action ON UPDATE no action;
