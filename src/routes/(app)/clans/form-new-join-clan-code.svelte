@@ -23,7 +23,6 @@
 			if (!event.form.valid) {
 				return;
 			}
-			open = false;
 		}
 	});
 

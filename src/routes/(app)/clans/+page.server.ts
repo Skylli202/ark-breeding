@@ -1,4 +1,4 @@
-import { superValidate } from 'sveltekit-superforms'
+import { setError, superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
 import { formGenJoinClanCodeSchema, formJoinClanSchema, formNewClanSchema } from './schema.js'
 import { auth } from '$lib/server/auth.js'
@@ -168,6 +168,38 @@ export const actions = {
       return fail(400, { form })
     }
 
-    return fail(500, { message: 'Internal Server Error: form action "JoinClan" is not implemented.' })
+    const { code } = form.data
+    const joinClanRecord = await db.query.joinClanCodesTable.findFirst({ where: eq(joinClanCodesTable.code, code) })
+    if (!joinClanRecord) {
+      console.error(`bad request: The user [] "" tried to join the clan ID [] but the provided token do not exist.`)
+      return setError(form, 'code', `The provided code do not exist or is expired.`)
+    }
+
+    const isTransacSuccessful = await db.transaction(async (tx) => {
+      const insertedRows = await tx.insert(usersToClansTable).values({ userId: session.user.id, clanId: joinClanRecord.clanId }).returning()
+      if (insertedRows.length !== 1) {
+        console.error(`db error: in transaction, insertion of user ID [${session.user.id}] and clan ID [${joinClanRecord.clanId}] in "${usersToClansTable._.name}" table inserted ${insertedRows.length} rows, expected only 1 insertion => rollback.`)
+        tx.rollback()
+        return false
+      }
+
+      let inviteeIds = joinClanRecord.inviteeIds ?? []
+      inviteeIds.push(session.user.id)
+      const updatedRows = await tx.update(joinClanCodesTable).set({ inviteeIds }).where(eq(joinClanCodesTable.id, joinClanRecord.id)).returning()
+      if (updatedRows.length !== 1) {
+        console.error(`db error: in transaction, update of the join clan code (with ID [${joinClanRecord.id}]) in "${joinClanCodesTable._.name}" table updated ${updatedRows.length} rows, expected only 1 update => rollback.`)
+        tx.rollback()
+        return false
+      }
+
+      return true
+    })
+
+    if (!isTransacSuccessful) {
+      console.error(`internal server error: could not make the user [${session.user.id}] join the clan [${joinClanRecord.clanId}] with code "${code}". See above logs.`)
+      return setError(form, 'code', 'internal server error: unable to process the join clan request.', { status: 500 })
+    }
+
+    return { form }
   }
 }

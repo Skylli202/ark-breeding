@@ -2,16 +2,17 @@
 	import * as Card from '$lib/components/ui/card/index';
 	import * as Dialog from '$lib/components/ui/dialog/index';
 	import { Button } from '$lib/components/ui/button';
-	import SiteHeader from '$lib/components/site-header.svelte';
-	import { buttonVariants } from '$lib/components/ui/button';
-	import { Plus, PlusIcon, User, X } from '@lucide/svelte';
-	import FormNewClan from './form-new-clan.svelte';
 	import { Badge } from '$lib/components/ui/badge';
+	import { Plus, PlusIcon, User, X } from '@lucide/svelte';
+	import { buttonVariants } from '$lib/components/ui/button';
+	import SiteHeader from '$lib/components/site-header.svelte';
+	import FormNewClan from './form-new-clan.svelte';
 	import FormJoinClan from './form-join-clan.svelte';
 	import FormNewJoinClanCode from './form-new-join-clan-code.svelte';
 
 	let openNewClanDialog = $state(false);
 	let openJoinClanDialog = $state(false);
+	let openGenJoinClanCodeDialog = $state(false);
 	let { data } = $props();
 	let session = $derived(data.session);
 	let clans = $derived(data.clans);
@@ -41,10 +42,6 @@
 		<Dialog.Content class="sm:max-w-[425px]">
 			<Dialog.Header>
 				<Dialog.Title>Join clan</Dialog.Title>
-				<Dialog.Description>
-					Paste the code your friends gave you down there! And join their clan to share your dinos
-					with them!
-				</Dialog.Description>
 			</Dialog.Header>
 			<FormJoinClan data={{ form: data.formJoinClan }} bind:open={openJoinClanDialog} />
 		</Dialog.Content>
@@ -90,7 +87,7 @@
 					{/if}
 				</Card.Content>
 				<Card.Footer class="flex-col items-start gap-1.5 text-sm">
-					<Dialog.Root>
+					<Dialog.Root bind:open={openGenJoinClanCodeDialog}>
 						<Dialog.Trigger class="line-clamp-1 flex items-center gap-2 font-medium">
 							Invite new player
 							<Button size="sm" variant="outline">
@@ -102,7 +99,11 @@
 								<Dialog.Title>Invite player</Dialog.Title>
 								<Dialog.Description>Share this code to your friend!</Dialog.Description>
 							</Dialog.Header>
-							<FormNewJoinClanCode data={{ form: data.formGenJoinClanCode }} clanId={clan.id} />
+							<FormNewJoinClanCode
+								data={{ form: data.formGenJoinClanCode }}
+								clanId={clan.id}
+								bind:open={openGenJoinClanCodeDialog}
+							/>
 						</Dialog.Content>
 					</Dialog.Root>
 					<div class="text-muted-foreground">
